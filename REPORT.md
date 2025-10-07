@@ -125,6 +125,51 @@ To sort files alphabetically, the program must have access to **all filenames at
 int compare_fileent(const void *a, const void *b);
 
 
+# Report: ANSI Color Codes and Executable Permissions
+
+## 1. How ANSI Escape Codes Work
+
+ANSI escape codes are special sequences of characters that the terminal interprets to apply text formatting such as colors, bold, underline, or cursor movement.  
+
+The general format of a color escape sequence is:
+
+- `\033` is the escape character (octal 033, hex 1B).  
+- `m` marks the end of the formatting sequence.  
+- `<attributes>`: e.g., 0 = reset, 1 = bold, 7 = reverse video.  
+- `<foreground>`: color codes (30–37 for standard colors).  
+- `<background>`: background color codes (40–47).
+
+**Example: Print text in green:**
+
+```c
+printf("\033[0;32mHello, World!\033[0m\n");
+
+
+## 2. To color an executable file, which permission bits in `st_mode` need to be checked?
+
+The `st_mode` field of `struct stat` contains the **file type** and **permission bits**.  
+To determine if a file is executable, check these bits:
+
+- **Owner execute bit:** `S_IXUSR`  
+- **Group execute bit:** `S_IXGRP`  
+- **Others execute bit:** `S_IXOTH`  
+
+### Example in C:
+
+```c
+#include <sys/stat.h>
+#include <stdio.h>
+
+struct stat st;
+if (stat("myfile", &st) == 0) {
+    if (st.st_mode & S_IXUSR)  printf("Owner can execute\n");
+    if (st.st_mode & S_IXGRP)  printf("Group can execute\n");
+    if (st.st_mode & S_IXOTH)  printf("Others can execute\n");
+}
+
+
+
+
 
 
   
