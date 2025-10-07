@@ -22,9 +22,9 @@ We can extract these using **bitwise operators** (`&`) along with predefined **m
 
 #### (a) Checking file type
 ```c
-if (S_ISDIR(st.st_mode))  printf("This is a directory\n");
-if (S_ISREG(st.st_mode))  printf("This is a regular file\n");
-if (S_ISLNK(st.st_mode))  printf("This is a symbolic link\n");
+-if (S_ISDIR(st.st_mode))  printf("This is a directory\n");
+-if (S_ISREG(st.st_mode))  printf("This is a regular file\n");
+-if (S_ISLNK(st.st_mode))  printf("This is a symbolic link\n");
 
 
 ## Report for Feature-3: Column Display (v1.2.0)
