@@ -21,6 +21,7 @@ OBJ_FILE = $(OBJ)/lsv1.0.0.o
 # ==============================
 # Default target
 # ==============================
+# ==============================
 all: $(TARGET)
 
 # Link object file into final executable
