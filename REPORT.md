@@ -25,3 +25,18 @@ We can extract these using **bitwise operators** (`&`) along with predefined **m
 if (S_ISDIR(st.st_mode))  printf("This is a directory\n");
 if (S_ISREG(st.st_mode))  printf("This is a regular file\n");
 if (S_ISLNK(st.st_mode))  printf("This is a symbolic link\n");
+
+
+## Report for Feature-3: Column Display (v1.2.0)
+
+### 1. Logic for "Down Then Across" Columnar Format
+
+In the "down then across" layout, filenames are first collected into an array and then printed row by row instead of sequentially in a single loop. The basic idea is:
+
+- All filenames are read and stored first.
+- The maximum filename length is determined to calculate proper column width.
+- Using the terminal width (from `ioctl`), the program determines how many columns can fit.
+- The total number of rows is then computed using the total number of files and the number of columns.
+- The printing logic iterates over each row, printing filenames at positions:
+  
+
