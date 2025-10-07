@@ -105,6 +105,27 @@ Using `ioctl` ensures the output always fits neatly in the visible area of the t
   int columnflag = 0;    // 0 = default, 1 = vertical, 2 = horizontal
 
 
+# Feature 5: Alphabetical Sort (ls-v1.4.0) Report
+
+## 1. Why is it necessary to read all directory entries into memory before you can sort them?
+
+To sort files alphabetically, the program must have access to **all filenames at once**. The `readdir()` function reads one entry at a time, so without storing them, sorting is impossible.
+
+**Potential drawbacks for directories with millions of files:**
+
+---
+
+## 2. Purpose and signature of the comparison function for `qsort()`
+
+`qsort()` is a generic C library function that needs a **comparison function** to determine the order of elements.
+
+**Signature:**
+
+```c
+int compare_fileent(const void *a, const void *b);
+
+
+
 
   
 
