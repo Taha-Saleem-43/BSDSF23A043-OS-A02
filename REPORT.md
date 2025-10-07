@@ -168,6 +168,29 @@ if (stat("myfile", &st) == 0) {
 }
 
 
+### Recursive Function Base Case
+
+**Q:** In a recursive function, what is a "base case"?  
+
+**A:** A base case is a condition that **stops the recursion** from continuing indefinitely. It provides a simple scenario where the function returns without making further recursive calls. Without a base case, recursion would lead to infinite loops and eventually a stack overflow.
+
+**In the context of recursive `ls`:**  
+The base case is when a directory contains **no subdirectories** (or only `"."` and `".."`). The recursion stops when the function encounters these entries, preventing further recursive calls.
+
+---
+
+### Importance of Constructing Full Paths
+
+**Q:** Why is it essential to construct a full path before making a recursive call?  
+
+**A:** Constructing the full path (e.g., `"parent_dir/subdir"`) ensures that the program knows the **exact location of the subdirectory** in the filesystem.  
+
+If you simply called:
+```c
+do_ls("subdir");
+
+
+
 
 
 
