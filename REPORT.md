@@ -38,5 +38,73 @@ In the "down then across" layout, filenames are first collected into an array an
 - Using the terminal width (from `ioctl`), the program determines how many columns can fit.
 - The total number of rows is then computed using the total number of files and the number of columns.
 - The printing logic iterates over each row, printing filenames at positions:
+
+
+
+This approach ensures that the output is aligned in columns and fills down each column before moving to the next one across.  
+
+A simple single loop through the filenames is **insufficient** because it would print the files only in a single column (top to bottom), without controlling the placement into multiple columns. To achieve a grid-like display that adapts to terminal width, you need to structure output by rows and columns rather than just one sequence.
+
+---
+
+### 2. Purpose of the `ioctl` System Call
+
+The `ioctl` system call with the `TIOCGWINSZ` argument is used to **query the terminal size**, specifically to obtain the current width (number of columns).  
+This allows the program to **dynamically adjust** the number of columns displayed based on the user's terminal width.
+
+**If only a fixed width (e.g., 80 columns) were used:**
+- The layout would not adapt when the terminal is resized.
+- On wider screens, the output would waste space (too few columns).
+- On narrower screens, lines might wrap incorrectly, breaking the alignment.
+
+Using `ioctl` ensures the output always fits neatly in the visible area of the terminal.
+
+---
+
+### Example Summary
+
+| Concept | Description |
+|----------|--------------|
+| **Down-then-across layout** | Prints filenames vertically down each column, then moves across to next column. |
+| **Why not single loop** | A single loop can't compute column/row positions, only lists sequentially. |
+| **`ioctl` purpose** | Detects actual terminal width dynamically. |
+| **Fixed width issue** | Output misaligns or wastes space on different terminal sizes. |
+
+# Feature 4: Horizontal Column Display (-x) – Report
+
+## 1. Implementation Complexity: Vertical vs Horizontal Display
+
+- **Vertical ("down then across") layout (`-c` / `do_ls_columns`)**  
+  - Files are printed **column by column** (top to bottom, then left to right).  
+  - Requires **pre-calculation of number of rows** and **column widths** before printing.  
+  - Steps:
+    1. Count files and find the **longest filename** for column width.  
+    2. Compute **number of columns** and **number of rows** based on terminal width.  
+    3. During printing, calculate **index = c * rows + r** to fetch the correct filename.  
+  - **Complexity:** Higher, because you must know the **rows and columns in advance** to avoid misalignment.
+
+- **Horizontal ("across") layout (`-x` / `do_ls_horizontal`)**  
+  - Files are printed **left to right**, wrapping to next line as needed.  
+  - Only needs **maximum filename width** and **current horizontal position** on the screen.  
+  - Steps:
+    1. Count files and find **longest filename**.  
+    2. Loop through files, print each, and check if **next filename exceeds terminal width**.  
+    3. Wrap line if necessary.  
+  - **Complexity:** Lower, because you do **not need row/column pre-calculation**, only a running counter.
+
+**Conclusion:**  
+> The vertical layout (`-c`) requires more pre-calculation than the horizontal layout (`-x`) because it needs to compute both **rows and columns** before printing, whereas horizontal printing can proceed **sequentially with a simple width check**.
+
+---
+
+## 2. Display Mode Management Strategy
+
+- Introduced **flag variables** in `main()`:
+  ```c
+  int longflag = 0;      // -l
+  int columnflag = 0;    // 0 = default, 1 = vertical, 2 = horizontal
+
+
+
   
 
