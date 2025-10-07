@@ -14,9 +14,9 @@ BIN  = bin
 # ==============================
 # Targets
 # ==============================
-TARGET = $(BIN)/lsv1.0.0
-SRC_FILE = $(SRC)/lsv1.0.0.c
-OBJ_FILE = $(OBJ)/lsv1.0.0.o
+TARGET = $(BIN)/lsv1.2.0
+SRC_FILE = $(SRC)/lsv1.2.0.c
+OBJ_FILE = $(OBJ)/lsv1.2.0.o
 
 # ==============================
 # Default target
@@ -31,7 +31,7 @@ $(TARGET): $(OBJ_FILE)
 	@echo "✅ Build successful! Executable: $(TARGET)"
 
 # Compile .c file into .o file
-$(OBJ)/lsv1.0.0.o: $(SRC)/lsv1.0.0.c
+$(OBJ)/lsv1.2.0.o: $(SRC)/lsv1.2.0.c
 	@mkdir -p $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
